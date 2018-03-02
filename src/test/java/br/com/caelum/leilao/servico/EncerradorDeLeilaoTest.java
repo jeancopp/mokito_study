@@ -110,6 +110,24 @@ public class EncerradorDeLeilaoTest {
 
     }
 
+    @Test
+    public void deveContinarAExecucaoMesmoQuandoDaoFalhar(){
+        Leilao leilao1 = criadorDeLeilao.naData(dataAntiga).para("Leilão 1").constroi();
+        Leilao leilao2 = criadorDeLeilao.naData(dataAntiga).para("Leilão 2").constroi();
+
+        when(leilaoDao.correntes()).thenReturn(Arrays.asList(leilao1, leilao2));
+        doThrow(new RuntimeException()).when(leilaoDao).atualiza(leilao1);
+
+        EncerradorDeLeilao encerrador = criarEncerrador();
+        encerrador.encerra();
+
+        verify(leilaoDao, times(1)).atualiza(leilao1);
+        verify(enviadorDeEmail, never()).envia(leilao1);
+
+        verify(leilaoDao,  times(1)).atualiza(leilao2);
+        verify(enviadorDeEmail,  times(1)).envia(leilao2);
+    }
+
 
     private EncerradorDeLeilao criarEncerrador() {
         return new EncerradorDeLeilao(leilaoDao, enviadorDeEmail);
