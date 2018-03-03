@@ -4,15 +4,14 @@ import java.util.Calendar;
 import java.util.List;
 
 import br.com.caelum.leilao.dominio.Leilao;
-import br.com.caelum.leilao.infra.dao.LeilaoDao;
 
 public class EncerradorDeLeilao {
 
-	private final RepositorioDeLeilao dao;
+	private final RepositorioDeLeiloes dao;
 	private final EnviadorDeEmail enviadorDeEmail;
 	private int total = 0;
 
-	public EncerradorDeLeilao(RepositorioDeLeilao leilaoDao, EnviadorDeEmail enviadorDeEmail) {
+	public EncerradorDeLeilao(RepositorioDeLeiloes leilaoDao, EnviadorDeEmail enviadorDeEmail) {
 		dao = leilaoDao;
 		this.enviadorDeEmail = enviadorDeEmail;
 	}
